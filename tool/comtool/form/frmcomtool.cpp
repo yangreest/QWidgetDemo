@@ -43,7 +43,7 @@ void frmComTool::initForm()
     connect(timerSave, SIGNAL(timeout()), this, SLOT(saveData()));
     connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(saveData()));
 
-    ui->tabWidget->setCurrentIndex(0);
+    //ui->tabWidget->setCurrentIndex(0);
     changeEnable(false);
 
     tcpOk = false;
@@ -165,32 +165,32 @@ void frmComTool::initConfig()
     }
 
     //串口转网络部分
-    ui->cboxMode->setCurrentIndex(ui->cboxMode->findText(AppConfig::Mode));
-    connect(ui->cboxMode, SIGNAL(currentIndexChanged(int)), this, SLOT(saveConfig()));
+    //ui->cboxMode->setCurrentIndex(ui->cboxMode->findText(AppConfig::Mode));
+    //connect(ui->cboxMode, SIGNAL(currentIndexChanged(int)), this, SLOT(saveConfig()));
 
-    ui->txtServerIP->setText(AppConfig::ServerIP);
-    connect(ui->txtServerIP, SIGNAL(textChanged(QString)), this, SLOT(saveConfig()));
+    //ui->txtServerIP->setText(AppConfig::ServerIP);
+    //connect(ui->txtServerIP, SIGNAL(textChanged(QString)), this, SLOT(saveConfig()));
 
-    ui->txtServerPort->setText(QString::number(AppConfig::ServerPort));
-    connect(ui->txtServerPort, SIGNAL(textChanged(QString)), this, SLOT(saveConfig()));
+    //ui->txtServerPort->setText(QString::number(AppConfig::ServerPort));
+    //connect(ui->txtServerPort, SIGNAL(textChanged(QString)), this, SLOT(saveConfig()));
 
-    ui->txtListenPort->setText(QString::number(AppConfig::ListenPort));
-    connect(ui->txtListenPort, SIGNAL(textChanged(QString)), this, SLOT(saveConfig()));
+    //ui->txtListenPort->setText(QString::number(AppConfig::ListenPort));
+    //connect(ui->txtListenPort, SIGNAL(textChanged(QString)), this, SLOT(saveConfig()));
 
-    QStringList values;
-    values << "0" << "10" << "50";
+    //QStringList values;
+    //values << "0" << "10" << "50";
 
-    for (int i = 100; i < 1000; i = i + 100) {
-        values << QString("%1").arg(i);
-    }
+    //for (int i = 100; i < 1000; i = i + 100) {
+    //    values << QString("%1").arg(i);
+    //}
 
-    ui->cboxSleepTime->addItems(values);
+    //ui->cboxSleepTime->addItems(values);
 
-    ui->cboxSleepTime->setCurrentIndex(ui->cboxSleepTime->findText(QString::number(AppConfig::SleepTime)));
-    connect(ui->cboxSleepTime, SIGNAL(currentIndexChanged(int)), this, SLOT(saveConfig()));
+    //ui->cboxSleepTime->setCurrentIndex(ui->cboxSleepTime->findText(QString::number(AppConfig::SleepTime)));
+    //connect(ui->cboxSleepTime, SIGNAL(currentIndexChanged(int)), this, SLOT(saveConfig()));
 
-    ui->ckAutoConnect->setChecked(AppConfig::AutoConnect);
-    connect(ui->ckAutoConnect, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    //ui->ckAutoConnect->setChecked(AppConfig::AutoConnect);
+    //connect(ui->ckAutoConnect, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
 }
 
 void frmComTool::saveConfig()
@@ -221,12 +221,12 @@ void frmComTool::saveConfig()
         timerSave->setInterval(AppConfig::SaveInterval);
     }
 
-    AppConfig::Mode = ui->cboxMode->currentText();
-    AppConfig::ServerIP = ui->txtServerIP->text().trimmed();
-    AppConfig::ServerPort = ui->txtServerPort->text().toInt();
-    AppConfig::ListenPort = ui->txtListenPort->text().toInt();
-    AppConfig::SleepTime = ui->cboxSleepTime->currentText().toInt();
-    AppConfig::AutoConnect = ui->ckAutoConnect->isChecked();
+    //AppConfig::Mode = ui->cboxMode->currentText();
+    //AppConfig::ServerIP = ui->txtServerIP->text().trimmed();
+    //AppConfig::ServerPort = ui->txtServerPort->text().toInt();
+    //AppConfig::ListenPort = ui->txtListenPort->text().toInt();
+    //AppConfig::SleepTime = ui->cboxSleepTime->currentText().toInt();
+    //AppConfig::AutoConnect = ui->ckAutoConnect->isChecked();
 
     AppConfig::writeConfig();
 }
@@ -257,10 +257,6 @@ void frmComTool::append(int type, const QString &data, bool clear)
     if (currentCount >= maxCount) {
         ui->txtMain->clear();
         currentCount = 0;
-    }
-
-    if (!isShow) {
-        return;
     }
 
     //过滤回车换行符
@@ -451,17 +447,6 @@ void frmComTool::on_btnReceiveCount_clicked()
     ui->btnReceiveCount->setText("接收 : 0 字节");
 }
 
-void frmComTool::on_btnStopShow_clicked()
-{
-    if (ui->btnStopShow->text() == "停止显示") {
-        isShow = false;
-        ui->btnStopShow->setText("开始显示");
-    } else {
-        isShow = true;
-        ui->btnStopShow->setText("停止显示");
-    }
-}
-
 void frmComTool::on_btnData_clicked()
 {
     QString fileName = QString("%1/%2").arg(QtHelper::appPath()).arg("send.txt");
@@ -495,29 +480,29 @@ void frmComTool::on_btnClear_clicked()
     append(0, "", true);
 }
 
-void frmComTool::on_btnStart_clicked()
-{
-    if (ui->btnStart->text() == "启动") {
-        if (AppConfig::ServerIP == "" || AppConfig::ServerPort == 0) {
-            append(6, "IP地址和远程端口不能为空");
-            return;
-        }
+//void frmComTool::on_btnStart_clicked()
+//{
+    //if (ui->btnStart->text() == "启动") {
+    //    if (AppConfig::ServerIP == "" || AppConfig::ServerPort == 0) {
+    //        append(6, "IP地址和远程端口不能为空");
+    //        return;
+    //    }
 
-        socket->connectToHost(AppConfig::ServerIP, AppConfig::ServerPort);
-        if (socket->waitForConnected(100)) {
-            ui->btnStart->setText("停止");
-            append(6, "连接服务器成功");
-            tcpOk = true;
-        }
-    } else {
-        socket->disconnectFromHost();
-        if (socket->state() == QAbstractSocket::UnconnectedState || socket->waitForDisconnected(100)) {
-            ui->btnStart->setText("启动");
-            append(6, "断开服务器成功");
-            tcpOk = false;
-        }
-    }
-}
+    //    socket->connectToHost(AppConfig::ServerIP, AppConfig::ServerPort);
+    //    if (socket->waitForConnected(100)) {
+    //        ui->btnStart->setText("停止");
+    //        append(6, "连接服务器成功");
+    //        tcpOk = true;
+    //    }
+    //} else {
+    //    socket->disconnectFromHost();
+    //    if (socket->state() == QAbstractSocket::UnconnectedState || socket->waitForDisconnected(100)) {
+    //        ui->btnStart->setText("启动");
+    //        append(6, "断开服务器成功");
+    //        tcpOk = false;
+    //    }
+    //}
+//}
 
 void frmComTool::on_ckAutoSend_stateChanged(int arg1)
 {
@@ -543,16 +528,16 @@ void frmComTool::on_ckAutoSave_stateChanged(int arg1)
 
 void frmComTool::connectNet()
 {
-    if (!tcpOk && AppConfig::AutoConnect && ui->btnStart->text() == "启动") {
-        if (AppConfig::ServerIP != "" && AppConfig::ServerPort != 0) {
-            socket->connectToHost(AppConfig::ServerIP, AppConfig::ServerPort);
-            if (socket->waitForConnected(100)) {
-                ui->btnStart->setText("停止");
-                append(6, "连接服务器成功");
-                tcpOk = true;
-            }
-        }
-    }
+    //if (!tcpOk && AppConfig::AutoConnect && ui->btnStart->text() == "启动") {
+    //    if (AppConfig::ServerIP != "" && AppConfig::ServerPort != 0) {
+    //        socket->connectToHost(AppConfig::ServerIP, AppConfig::ServerPort);
+    //        if (socket->waitForConnected(100)) {
+    //            ui->btnStart->setText("停止");
+    //            append(6, "连接服务器成功");
+    //            tcpOk = true;
+    //        }
+    //    }
+    //}
 }
 
 void frmComTool::readDataNet()
@@ -580,8 +565,8 @@ void frmComTool::readDataNet()
 
 void frmComTool::readErrorNet()
 {
-    ui->btnStart->setText("启动");
-    append(6, QString("连接服务器失败,%1").arg(socket->errorString()));
-    socket->disconnectFromHost();
-    tcpOk = false;
+    //ui->btnStart->setText("启动");
+    //append(6, QString("连接服务器失败,%1").arg(socket->errorString()));
+    //socket->disconnectFromHost();
+    //tcpOk = false;
 }
