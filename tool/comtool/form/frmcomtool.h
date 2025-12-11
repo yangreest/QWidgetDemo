@@ -61,7 +61,7 @@ private slots:
 
     void on_btnClear_clicked();
     void on_btnData_clicked();
-    void on_btnStart_clicked();
+    //void on_btnStart_clicked();
 
     void on_ckAutoSend_stateChanged(int arg1);
     void on_ckAutoSave_stateChanged(int arg1);
