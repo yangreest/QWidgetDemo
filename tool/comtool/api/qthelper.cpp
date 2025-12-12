@@ -544,16 +544,20 @@ void QtHelper::setFont(int fontSize)
 
 void QtHelper::setCode(bool utf8)
 {
-    QTextCodec *codec = QTextCodec::codecForName("utf-8");
-#if (QT_VERSION < QT_VERSION_CHECK(5,0,0))
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    QTextCodec* codec = QTextCodec::codecForName("utf-8");
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForTr(codec);
-#endif
-
-    //如果想要控制台打印信息中文正常就注释掉这个设置/setCodecForLocale会影响toLocal8Bit函数
     if (utf8) {
         QTextCodec::setCodecForLocale(codec);
     }
+#elif (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    if (utf8) {
+        QTextCodec* codec = QTextCodec::codecForName("utf-8");
+        QTextCodec::setCodecForLocale(codec);
+    }
+#endif
+    // Qt6 中不需要也不支持 QTextCodec，UTF-8 是默认编码
 }
 
 void QtHelper::setTranslator(const QString &qmFile)

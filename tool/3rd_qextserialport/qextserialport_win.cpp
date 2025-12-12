@@ -44,7 +44,7 @@
 #endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <QtCore5Compat/QRegExp>
+#include <QtCore>
 #else
 #include <QtCore/QRegExp>
 #endif
@@ -73,9 +73,10 @@ void QextSerialPortPrivate::platformSpecificDestruct()
 */
 static QString fullPortNameWin(const QString &name)
 {
-    QRegExp rx(QLatin1String("^COM(\\d+)"));
+    QRegularExpression rx(QLatin1String("^COM(\\d+)"));
     QString fullName(name);
-    if (rx.indexIn(fullName) >= 0) {
+    QRegularExpressionMatch match = rx.match(fullName);
+    if (match.hasMatch()) {
         fullName.prepend(QLatin1String("\\\\.\\"));
     }
 

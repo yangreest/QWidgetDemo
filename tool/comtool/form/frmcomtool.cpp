@@ -446,34 +446,34 @@ void frmComTool::on_btnReceiveCount_clicked()
     receiveCount = 0;
     ui->btnReceiveCount->setText("接收 : 0 字节");
 }
-
-void frmComTool::on_btnData_clicked()
-{
-    QString fileName = QString("%1/%2").arg(QtHelper::appPath()).arg("send.txt");
-    QFile file(fileName);
-    if (!file.exists()) {
-        return;
-    }
-
-    if (ui->btnData->text() == "管理数据") {
-        ui->txtMain->setReadOnly(false);
-        ui->txtMain->clear();
-        file.open(QFile::ReadOnly | QIODevice::Text);
-        QTextStream in(&file);
-        ui->txtMain->setText(in.readAll());
-        file.close();
-        ui->btnData->setText("保存数据");
-    } else {
-        ui->txtMain->setReadOnly(true);
-        file.open(QFile::WriteOnly | QIODevice::Text);
-        QTextStream out(&file);
-        out << ui->txtMain->toPlainText();
-        file.close();
-        ui->txtMain->clear();
-        ui->btnData->setText("管理数据");
-        AppData::readSendData();
-    }
-}
+//
+//void frmComTool::on_btnData_clicked()
+//{
+//    QString fileName = QString("%1/%2").arg(QtHelper::appPath()).arg("send.txt");
+//    QFile file(fileName);
+//    if (!file.exists()) {
+//        return;
+//    }
+//
+//    if (ui->btnData->text() == "管理数据") {
+//        ui->txtMain->setReadOnly(false);
+//        ui->txtMain->clear();
+//        file.open(QFile::ReadOnly | QIODevice::Text);
+//        QTextStream in(&file);
+//        ui->txtMain->setText(in.readAll());
+//        file.close();
+//        ui->btnData->setText("保存数据");
+//    } else {
+//        ui->txtMain->setReadOnly(true);
+//        file.open(QFile::WriteOnly | QIODevice::Text);
+//        QTextStream out(&file);
+//        out << ui->txtMain->toPlainText();
+//        file.close();
+//        ui->txtMain->clear();
+//        ui->btnData->setText("管理数据");
+//        AppData::readSendData();
+//    }
+//}
 
 void frmComTool::on_btnClear_clicked()
 {
